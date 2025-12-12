@@ -56,5 +56,17 @@ The function input will be as follows:
 	   * someone debit 20 -> won't respond anything directly throw error
 3. Transactions will be included with DynamoDB record lock.
 
-## Approach
+## Solution Approach
 Lets target it solving with MVC approach. We will have a corresponding models, their respective routes and controller for above mentioned requirement's APIs. We will have corresponding managers to manager CRUDs.
+
+Also for non functional requirements, we need to maintain other multiple parameters. 
+  * For maintaining idempotency on transaction, we need to have a transaction id. If duplicate request with same transaction id is received by server, it should be discarded.
+  * For avoiding race condition, every account will be assigned with a lock. If a thread is catching that lock, another thread came at sametime, either that will wait or will result failure.
+    * In ideal scenario that's supposed to wait for previous transaction to process, but for simplicity lets fail it for now.
+
+### Validation logics
+  * Balance can't go below 0.
+  * Debit amount can't be more than available balance.
+  * Transactions can be either of CREDIT/DEBIT.
+  * Check if transaction id is already existing in transaction history or not
+  * Check if account lock is already in use or not.
