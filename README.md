@@ -44,7 +44,7 @@ The function input will be as follows:
  * User(id, Account) --has(A)--> Account({id, Amount}, [getAmount, setAmount])
  * UserManager -> CRUD operations will be there
  * AccountManager -> CRUD operations will be there
- * Transactions(id, type(CREDIT, DEBIT), account, amount, status(SUCCESS, IN_PROGRESS, FAILED, DISCARDED))
+ * Transactions(id, type(credit, debit), account, amount, status(SUCCESS, IN_PROGRESS, FAILED, DISCARDED))
  * TransactionsManager
 1. I will provide an API to
    - add User
@@ -67,6 +67,36 @@ Also for non functional requirements, we need to maintain other multiple paramet
 ### Validation logics
   * Balance can't go below 0.
   * Debit amount can't be more than available balance.
-  * Transactions can be either of CREDIT/DEBIT.
+  * Transactions can be either of credit/debit.
   * Check if transaction id is already existing in transaction history or not
   * Check if account lock is already in use or not.
+
+### Handled cases
+  * Idempotency by including idempotentId
+  * Race condition by adding locks to account
+
+## Setup and Run application with below
+```bash
+1. npm install
+2. npm run dynamodb:start
+3. npm run setup-tables
+4. npm run dev
+5. Curl for APIs
+  # Add an user
+  a. curl --location 'localhost:3000/users' --header 'Content-Type: application/json' --data '{"userId": "1"}' 
+
+  # Fetch user's amount on userId
+  b. curl --location 'localhost:3000/users/1/amount'
+  
+  # Below API will help doing single transaction  
+  c. curl --location 'localhost:3000/transactions' --header 'Content-Type: application/json' --data '{"idempotentKey": "2", "userId": "1", "type": "debit", "amount": "250"}'
+
+  # Bulk Transactions
+  d. curl --location 'localhost:3000/transactions/bulk' --header 'Content-Type: application/json' --data '{"userId":"1","transactions":[{"idempotentKey":"4","userId":"1","type":"credit","amount":"250"},{"idempotentKey":"5","userId":"1","type":"debit","amount":"120"},{"idempotentKey":"6","userId":"1","type":"debit","amount":"110"},{"idempotentKey":"7","userId":"1","type":"credit","amount":"20"},{"idempotentKey":"8","userId":"1","type":"debit","amount":"50"},{"idempotentKey":"9","userId":"1","type":"credit","amount":"10"}]}'
+
+  #APIs
+  e. curl --location 'localhost:3000'
+
+  # Healthcheck
+  f. curl --location 'localhost:3000/health'
+```

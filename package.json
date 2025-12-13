@@ -1,0 +1,39 @@
+{
+  "name": "cash-transaction",
+  "version": "1.0.0",
+  "description": "TypeScript application with DynamoDB",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "watch": "tsc --watch",
+    "setup-tables": "ts-node src/scripts/setupTables.ts",
+    "dynamodb:start": "./scripts/start-dynamodb.sh",
+    "dynamodb:stop": "./scripts/stop-dynamodb.sh",
+    "dynamodb:docker": "docker-compose up -d dynamodb-local",
+    "setup": "bash scripts/setup.sh"
+  },
+  "keywords": [
+    "typescript",
+    "dynamodb",
+    "aws"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.490.0",
+    "@aws-sdk/lib-dynamodb": "^3.490.0",
+    "express": "^4.18.2",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
+
