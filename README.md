@@ -1,4 +1,4 @@
-# cash-transactions
+# Cash Transactions
 ## Problem Statement
 ### Task 1: Retrieve Current Balance Function
 You are tasked with creating a function in TypeScript that retrieves the current balance for a
@@ -76,12 +76,24 @@ Also for non functional requirements, we need to maintain other multiple paramet
   * Race condition by adding locks to account
 
 ## Setup and Run application with below
+- Prerequisites for running the application:
+  - Node.js is required. Please install Node.js v18 or higher.
+  - Docker is required.
+  - npm is required.
+```bash
+1. npm run setup
+```
+OR
 ```bash
 1. npm install
-2. npm run dynamodb:start
-3. npm run setup-tables
-4. npm run dev
-5. Curl for APIs
+2. Create .env file and put below (Required for dynamodb configuration and setting up tables)
+	DYNAMODB_ENDPOINT=http://localhost:8000
+	AWS_REGION=us-east-1
+	PORT=3000
+3. npm run dynamodb:start
+4. npm run setup-tables
+5. npm run dev
+6. Curl for APIs
   # Add an user
   a. curl --location 'localhost:3000/users' --header 'Content-Type: application/json' --data '{"userId": "1"}' 
 
